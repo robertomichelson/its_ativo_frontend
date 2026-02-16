@@ -126,14 +126,30 @@ interface MenuItem {
   }>
 }
 
-const menuItems = computed<MenuItem[]>(() => [
-  {
-    id: 'home',
-    label: 'HOME',
-    icon: 'home',
-    path: '/home',
-  },
-])
+const perfis: number[] = authStore.user?.idperfil || []
+const isAdmin = computed(() => perfis.includes(1))
+
+const menuItems = computed<MenuItem[]>(() => {
+  const items: MenuItem[] = [
+    {
+      id: 'home',
+      label: 'HOME',
+      icon: 'home',
+      path: '/home',
+    },
+  ]
+
+  if (isAdmin.value) {
+    items.push({
+      id: 'usuarios',
+      label: 'USUARIOS',
+      icon: 'group',
+      path: '/usuarios',
+    })
+  }
+
+  return items
+})
 
 const updateExpandedMenus = () => {
   const currentPath = route.path
