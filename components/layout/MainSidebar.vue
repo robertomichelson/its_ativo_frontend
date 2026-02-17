@@ -146,6 +146,13 @@ const menuItems = computed<MenuItem[]>(() => {
       icon: 'group',
       path: '/usuarios',
     })
+
+    items.push({
+      id: 'campanhas',
+      label: 'CAMPANHAS',
+      icon: 'campaign',
+      path: '/campanhas',
+    })
   }
 
   return items
