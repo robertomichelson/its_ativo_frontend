@@ -1,81 +1,103 @@
 <template>
-  <div class="q-pa-md row items-start q-gutter-md">
-    <q-card class="my-card">
-      <q-card-section>
-        <div class="text-h6">Dados do Cliente</div>
-        <div class="text-subtitle2">{{ client.name }}</div>
-      </q-card-section>
+  <div class="clt">
+    <span class="clt__name">{{ client.name }}</span>
 
-      <q-separator />
+    <span class="clt__sep" />
 
-      <q-card-section>
-        <div class="row q-col-gutter-sm">
-            <div class="col-12 col-md-6">
-                <q-item>
-                    <q-item-section avatar>
-                        <q-icon name="person" color="primary" />
-                    </q-item-section>
-                    <q-item-section>
-                        <q-item-label caption>Nome</q-item-label>
-                        <q-item-label>{{ client.name }}</q-item-label>
-                    </q-item-section>
-                </q-item>
-            </div>
-             <div class="col-12 col-md-6">
-                <q-item>
-                    <q-item-section avatar>
-                        <q-icon name="badge" color="primary" />
-                    </q-item-section>
-                     <q-item-section>
-                        <q-item-label caption>CPF</q-item-label>
-                        <q-item-label>{{ client.cpf }}</q-item-label>
-                    </q-item-section>
-                </q-item>
-            </div>
-             <div class="col-12 col-md-6">
-                <q-item>
-                    <q-item-section avatar>
-                        <q-icon name="phone" color="primary" />
-                    </q-item-section>
-                     <q-item-section>
-                        <q-item-label caption>Telefones</q-item-label>
-                        <q-item-label>{{ client.phones.join(', ') }}</q-item-label>
-                    </q-item-section>
-                </q-item>
-            </div>
-             <div class="col-12 col-md-6">
-                <q-item>
-                    <q-item-section avatar>
-                        <q-icon name="location_on" color="primary" />
-                    </q-item-section>
-                     <q-item-section>
-                        <q-item-label caption>Endereço</q-item-label>
-                        <q-item-label v-if="client.address">
-                            {{ client.address.street }}, {{ client.address.number }} - {{ client.address.neighborhood }}
-                            <br>
-                            {{ client.address.city }} - {{ client.address.state }}
-                        </q-item-label>
-                        <q-item-label v-else>Endereço não informado</q-item-label>
-                    </q-item-section>
-                </q-item>
-            </div>
-        </div>
-      </q-card-section>
-    </q-card>
+    <span class="clt__field clt__field--phone">
+      <q-icon name="phone_in_talk" size="13px" />
+      <template v-if="client.ddd">({{ client.ddd }}) </template>{{ client.phones[0] }}
+      <span v-if="client.phones.length > 1" class="clt__more">
+        +{{ client.phones.length - 1 }}
+        <q-tooltip>
+          <div v-for="(p, i) in client.phones.slice(1)" :key="i">{{ p }}</div>
+        </q-tooltip>
+      </span>
+    </span>
+
+    <span class="clt__sep" />
+
+    <span class="clt__field">
+      <q-icon name="badge" size="13px" />
+      {{ client.cpf }}
+    </span>
+
+    <span v-if="client.address" class="clt__sep" />
+
+    <span v-if="client.address" class="clt__field clt__addr">
+      <q-icon name="location_on" size="13px" />
+      {{ client.address.street }}, {{ client.address.number }}
+      <template v-if="client.address.complement"> – {{ client.address.complement }}</template>
+      · {{ client.address.neighborhood }} · {{ client.address.city }}/{{ client.address.state }}
+    </span>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { ClientData } from '~/services/attendance.service';
-
-defineProps<{
-  client: ClientData
-}>()
+import type { ClientData } from '~/services/attendance.service'
+defineProps<{ client: ClientData }>()
 </script>
 
 <style scoped>
-.my-card {
-  width: 100%;
-  max-width: 800px;
+.clt {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 10px;
+  padding: 0.75rem 1.1rem;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.clt__name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.clt__sep {
+  width: 1px;
+  height: 14px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+.clt__field {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.clt__field--phone {
+  color: var(--green);
+  font-weight: 600;
+}
+
+.clt__addr {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.clt__more {
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: var(--border);
+  padding: 1px 5px;
+  border-radius: 4px;
+  cursor: default;
+  color: var(--muted);
+}
+
+@media (max-width: 768px) {
+  .clt__sep { display: none; }
 }
 </style>

@@ -137,6 +137,12 @@ const menuItems = computed<MenuItem[]>(() => {
       icon: 'home',
       path: '/home',
     },
+    {
+      id: 'atendimento',
+      label: 'ATENDIMENTO ATIVO',
+      icon: 'headset_mic',
+      path: '/atendimento-ativo',
+    },
   ]
 
   if (isAdmin.value) {

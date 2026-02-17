@@ -6,6 +6,7 @@ export default defineNuxtConfig({
   css: [
     'quasar/src/css/index.sass',
     '@quasar/extras/material-icons/material-icons.css',
+    '~/assets/css/theme.css',
   ],
   runtimeConfig: {
     public: {
